@@ -1,11 +1,11 @@
 package org.jetbrains.research.ktglean.storage
 
-import org.jetbrains.research.ktglean.Predicate
 import org.jetbrains.research.ktglean.replaceExtension
+import org.jetbrains.research.ktglean.serialization.Fact
 import java.nio.file.*
 import kotlin.io.path.*
 
-class LoggingStorage(path: Path) : PredicateStorage {
+class LoggingStorage(path: Path) : FactsStorage {
     private val filePath = path.replaceExtension("log")
 
     init {
@@ -22,7 +22,7 @@ class LoggingStorage(path: Path) : PredicateStorage {
         )
     }
 
-    override fun addPredicate(predicate: Predicate) = log(predicate.toString())
+    override fun addFact(fact: Fact) = log(fact.toString())
 
     override fun dispose() = log("Disposed")
 }
