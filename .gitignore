@@ -1,0 +1,17 @@
+## IDEA ANTLR4 plugin
+gen
+*.tokens
+
+## Gradle
+build
+.gradle
+
+## IntelliJ
+.idea
+
+## Visual Studio Code
+.vscode
+.code-workspace
+
+## OS X
+.DS_Store
