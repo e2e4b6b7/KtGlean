@@ -1,0 +1,8 @@
+schema kotlin.1 {
+    predicate Class : {
+    	name : string,
+    	supertypes : [Class],
+    }
+}
+
+schema all.1 : kotlin.1 {}
