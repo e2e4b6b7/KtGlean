@@ -1,6 +1,5 @@
 package org.jetbrains.research.ktglean.storage
 
-import org.jetbrains.research.ktglean.replaceExtension
 import org.jetbrains.research.ktglean.serialization.Fact
 import org.jetbrains.research.ktglean.serialization.PredicateFacts
 import java.nio.file.Path
@@ -8,8 +7,8 @@ import kotlin.io.path.*
 
 
 class JsonStorage(path: Path) : FactsStorage {
-    private val filePath = path.replaceExtension("json")
-    private val predicates = HashMap<String, PredicateFacts>()
+    private val filePath = path.resolve("data.json")
+    private val facts = HashMap<String, PredicateFacts>()
 
     init {
         filePath.parent.createDirectories()
@@ -18,12 +17,12 @@ class JsonStorage(path: Path) : FactsStorage {
     }
 
     override fun addFact(fact: Fact) {
-        predicates.computeIfAbsent(fact.name(), ::PredicateFacts).facts.add(fact)
+        facts.computeIfAbsent(fact.name, ::PredicateFacts).facts.add(fact)
     }
 
     override fun dispose() {
         filePath.bufferedWriter().use {
-            PredicateFacts.writeBatch(predicates.values, it)
+            PredicateFacts.writeBatch(facts.values, it)
         }
     }
 }

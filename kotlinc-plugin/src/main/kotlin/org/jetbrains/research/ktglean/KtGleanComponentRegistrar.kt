@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.*
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrar
 import java.nio.file.Path
+import kotlin.io.path.exists
 
 
 @AutoService(ComponentRegistrar::class)
@@ -20,7 +21,9 @@ class KtGleanComponentRegistrar : ComponentRegistrar {
     private fun buildOutputPath(configuration: CompilerConfiguration): Path {
         val rootPath = configuration[OUTPUT_DIRECTORY_KEY] ?: error("Output directory is required")
         val moduleName = configuration[CommonConfigurationKeys.MODULE_NAME] ?: error("Module name expected")
-        return Path.of(rootPath).resolve(moduleName)
+        val path = Path.of(rootPath).resolve(moduleName)
+        if (path.exists()) return path.addFreeIndex()
+        return path
     }
 
     private fun buildIndexersRegistrar(project: MockProject, path: Path): FirExtensionRegistrar {
