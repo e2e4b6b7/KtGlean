@@ -15,27 +15,26 @@ class ClassNamesIndexer(private val storage: FactsStorage) : FirClassIndexer() {
 
     override fun index(declaration: FirClass, context: CheckerContext) {
         if (declaration is FirRegularClass) {
-            context.getClazz(declaration)
+            storage.addFact(context.getClass(declaration))
         }
     }
 
     private fun CheckerContext.resolve(ref: FirTypeRef): FirRegularClass {
         return when (val firDeclaration = ref.firClassLike(session)) {
-            is FirAnonymousObject -> error("Impossible")
             is FirRegularClass -> firDeclaration
             is FirTypeAlias -> resolve(firDeclaration.expandedTypeRef)
-            null -> error("Impossible")
+            is FirAnonymousObject -> error("Inheritance from an anonymous class")
+            null -> error("Expecting resolved declaration")
         }
     }
 
-    private fun CheckerContext.getClazz(firRegularClass: FirRegularClass): GleanClass {
+    private fun CheckerContext.getClass(firRegularClass: FirRegularClass): GleanClass {
         cache[firRegularClass.classId]?.let { return it }
 
         val name = firRegularClass.classId.asFqNameString()
-        val supers = firRegularClass.superTypeRefs.map { getClazz(resolve(it)) }
+        val supers = firRegularClass.superTypeRefs.map { getClass(resolve(it)) }
         val gleanClass = GleanClass(GleanClass.Key(name, supers))
 
-        storage.addFact(gleanClass)
         cache[firRegularClass.classId] = gleanClass
 
         return gleanClass

@@ -12,6 +12,7 @@ object FactsSerializer : JsonSerializer<Collection<Fact>> {
         val array = JsonArray()
         src.asSequence()
             .map(context::serialize)
+            // remain only new predicates (which serialized not as id reference)
             .filterIsInstance<JsonObject>()
             .forEach(array::add)
         return array

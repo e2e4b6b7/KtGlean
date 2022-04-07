@@ -6,5 +6,5 @@ interface Fact {
     val value: Any?
         get() = null
 
-    fun name(): String
+    val name: String
 }

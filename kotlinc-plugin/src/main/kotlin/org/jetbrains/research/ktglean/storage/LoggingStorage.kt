@@ -1,12 +1,12 @@
 package org.jetbrains.research.ktglean.storage
 
-import org.jetbrains.research.ktglean.replaceExtension
 import org.jetbrains.research.ktglean.serialization.Fact
 import java.nio.file.*
 import kotlin.io.path.*
 
+
 class LoggingStorage(path: Path) : FactsStorage {
-    private val filePath = path.replaceExtension("log")
+    private val filePath = path.resolve("log.txt")
 
     init {
         filePath.parent.createDirectories()

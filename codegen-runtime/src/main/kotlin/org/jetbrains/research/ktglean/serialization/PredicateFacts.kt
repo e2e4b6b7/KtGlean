@@ -6,7 +6,7 @@ import com.google.gson.annotations.JsonAdapter
 class PredicateFacts(
     val predicate: String,
     @JsonAdapter(FactsSerializer::class)
-    val facts: MutableSet<Fact> = HashSet()
+    val facts: MutableCollection<Fact> = ArrayList()
 ) {
     companion object {
         fun writeBatch(facts: Collection<PredicateFacts>, output: Appendable) {
