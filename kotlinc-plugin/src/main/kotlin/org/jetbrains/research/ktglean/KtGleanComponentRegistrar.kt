@@ -16,7 +16,7 @@ import kotlin.io.path.exists
 class KtGleanComponentRegistrar : ComponentRegistrar, KoinComponent {
     override fun registerProjectComponents(project: MockProject, configuration: CompilerConfiguration) {
         startKoin {
-            modules(builders)
+            modules(factories)
         }
 
         val outputPath = buildOutputPath(configuration)

@@ -12,6 +12,7 @@ class PredicateFacts(
         fun writeBatch(facts: Collection<PredicateFacts>, output: Appendable) {
             val gson = GsonBuilder().apply {
                 registerTypeHierarchyAdapter(Fact::class.java, BackReferenceSerializer())
+                registerTypeHierarchyAdapter(Enum::class.java, EnumSerializer)
             }.create()
 
             gson.toJson(facts, output)
