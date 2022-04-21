@@ -1,13 +1,48 @@
 schema kotlin.1 {
-    predicate Class : {
-    	name : string,
-    	supertypes : [Class],
-    }
 
-    predicate Function : {
-        returnType : Class,
-        name : string,
-    }
+predicate File : string
+
+type Loc = {
+    file : File,
+    offset : nat,
 }
 
-schema all.1 : kotlin.1 {}
+predicate Class : {
+  	name : string,
+   	supertypes : [Class],
+}
+
+predicate Function : {
+    name : string,
+    returnType : Class,
+}
+
+predicate FunctionCall : {
+   	function : Function,
+    loc : Loc,
+}
+
+}
+
+schema floatLiteralAnalysis.1 {
+import kotlin.1
+
+predicate FloatLiteralUsage : {
+    call : kotlin.FunctionCall,
+    literal : string,
+    position : nat,
+}
+
+}
+
+schema rangesAnalysis.1 {
+import kotlin.1
+
+predicate RangeCall : {
+     call : kotlin.FunctionCall,
+     context : enum { FOR | WHILE | IF | WHEN | PROPERTY | FOREACH | MAP | TOLIST | REQUIRE | OTHER },
+}
+
+}
+
+schema all.1 : kotlin.1, floatLiteralAnalysis.1, rangesAnalysis.1 {}
