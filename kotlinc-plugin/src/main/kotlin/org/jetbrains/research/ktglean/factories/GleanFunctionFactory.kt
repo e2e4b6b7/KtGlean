@@ -16,16 +16,16 @@ class GleanFunctionFactory : KoinComponent {
         val callableId = firFunction.symbol.callableId
         cache[callableId]?.let { return it }
 
-        val returnGleanClass = getReturnGleanClass(firFunction, context) ?: GleanClass.UNRESOLVED
+        val gleanReturnClass = gleanReturnClass(firFunction, context) ?: GleanClass.UNRESOLVED
         val name = callableId.asSingleFqName().asString()
-        val fact = GleanFunction(GleanFunction.Key(name, returnGleanClass))
+        val fact = GleanFunction(GleanFunction.Key(name, gleanReturnClass))
 
         cache[callableId] = fact
 
         return fact
     }
 
-    private fun getReturnGleanClass(firFunction: FirFunction, context: CheckerContext) =
+    private fun gleanReturnClass(firFunction: FirFunction, context: CheckerContext) =
         firFunction.returnTypeRef.firRegularClass(context)
             ?.let { firReturnClass -> classBuilder.getClass(firReturnClass, context) }
 }

@@ -15,7 +15,7 @@ class GleanClassFactory : KoinComponent {
         cache[firRegularClass.classId]?.let { return it }
 
         val name = firRegularClass.classId.asFqNameString()
-        val supers = firRegularClass.superTypeRefs.map { getSuperclass(it, context) ?: GleanClass.UNRESOLVED }
+        val supers = firRegularClass.superTypeRefs.map { gleanSuperclass(it, context) ?: GleanClass.UNRESOLVED }
         val gleanClass = GleanClass(GleanClass.Key(name, supers))
 
         cache[firRegularClass.classId] = gleanClass
@@ -23,6 +23,6 @@ class GleanClassFactory : KoinComponent {
         return gleanClass
     }
 
-    private fun getSuperclass(typeRef: FirTypeRef, context: CheckerContext) =
+    private fun gleanSuperclass(typeRef: FirTypeRef, context: CheckerContext) =
         typeRef.firRegularClass(context)?.let { regularClass -> getClass(regularClass, context) }
 }
