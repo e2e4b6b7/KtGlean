@@ -7,6 +7,8 @@ import org.jetbrains.kotlin.fir.psi
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
 import org.jetbrains.research.ktglean.predicates.GleanRangeCall
+import org.jetbrains.research.ktglean.predicates.GleanRangeCall.Context
+import org.jetbrains.research.ktglean.predicates.GleanRangeCall.Context.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -18,20 +20,27 @@ class GleanRangeCallFactory : KoinComponent {
         return GleanRangeCall(GleanRangeCall.Key(gleanCall, context(functionCall)))
     }
 
-    private fun context(functionCall: FirFunctionCall): GleanRangeCall.Context {
-        val psi = functionCall.psi ?: return GleanRangeCall.Context.OTHER
-        return psi.parentsWithSelf.mapNotNull { context(it) }.firstOrNull() ?: GleanRangeCall.Context.OTHER
+    private fun context(functionCall: FirFunctionCall): Context {
+        val psi = functionCall.psi ?: return OTHER
+        return psi.parentsWithSelf.mapNotNull { context(it) }.firstOrNull() ?: OTHER
     }
 
-    private fun context(el: PsiElement): GleanRangeCall.Context? {
+    private fun context(el: PsiElement): Context? {
         return when (el) {
-            is KtForExpression -> GleanRangeCall.Context.FOR
-            is KtWhileExpression -> GleanRangeCall.Context.WHILE
-            is KtIfExpression -> GleanRangeCall.Context.IF
-            is KtWhenExpression -> GleanRangeCall.Context.WHEN
-            is KtProperty -> GleanRangeCall.Context.PROPERTY
+            is KtForExpression -> FOR
+            is KtWhileExpression -> WHILE
+            is KtIfExpression -> IF
+            is KtWhenExpression -> WHEN
+            is KtProperty -> PROPERTY
+            is KtDotQualifiedExpression ->
+                when ((el.selectorExpression as? KtCallExpression)?.calleeExpression?.text) {
+                    "forEach" -> FOREACH
+                    "map" -> MAP
+                    "toList" -> TOLIST
+                    else -> null
+                }
+            is KtCallExpression -> if (el.calleeExpression?.text == "require") REQUIRE else null
             else -> null
         }
     }
 }
-
