@@ -1,7 +1,6 @@
 plugins {
     kotlin("jvm")
     id("com.github.gmazzo.buildconfig")
-    id("com.gradle.plugin-publish") version "0.18.0"
     `java-gradle-plugin`
 }
 
@@ -18,12 +17,6 @@ buildConfig {
     buildConfigField("String", "PLUGIN_GROUP_ID", "\"${project.group}\"")
     buildConfigField("String", "PLUGIN_ARTIFACT_ID", "\"${project.name}\"")
     buildConfigField("String", "PLUGIN_VERSION", "\"${project.version}\"")
-}
-
-pluginBundle {
-    website = "<substitute your project website>"
-    vcsUrl = "<uri to project source repository>"
-    tags = listOf("tags", "for", "your", "plugins")
 }
 
 gradlePlugin {
