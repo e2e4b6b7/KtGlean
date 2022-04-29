@@ -24,5 +24,5 @@ class GleanClassFactory : KoinComponent {
     }
 
     private fun gleanSuperclass(typeRef: FirTypeRef, context: CheckerContext) =
-        typeRef.firRegularClass(context)?.let { regularClass -> getClass(regularClass, context) }
+        typeRef.firRegularClass(context)?.let { getClass(it, context) }
 }

@@ -6,14 +6,13 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.compiler.plugin.ComponentRegistrar
 import org.jetbrains.kotlin.config.*
 import org.jetbrains.kotlin.fir.extensions.FirExtensionRegistrar
-import org.koin.core.component.KoinComponent
 import org.koin.core.context.startKoin
 import java.nio.file.Path
 import kotlin.io.path.exists
 
 
 @AutoService(ComponentRegistrar::class)
-class KtGleanComponentRegistrar : ComponentRegistrar, KoinComponent {
+class KtGleanComponentRegistrar : ComponentRegistrar {
     override fun registerProjectComponents(project: MockProject, configuration: CompilerConfiguration) {
         startKoin {
             modules(factories)

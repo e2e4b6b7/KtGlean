@@ -26,6 +26,5 @@ class GleanFunctionFactory : KoinComponent {
     }
 
     private fun gleanReturnClass(firFunction: FirFunction, context: CheckerContext) =
-        firFunction.returnTypeRef.firRegularClass(context)
-            ?.let { firReturnClass -> classBuilder.getClass(firReturnClass, context) }
+        firFunction.returnTypeRef.firRegularClass(context)?.let { classBuilder.getClass(it, context) }
 }
