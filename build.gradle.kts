@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.21" apply false
+    kotlin("jvm") version "1.7.20-dev-474" apply false
     id("com.github.gmazzo.buildconfig") version "3.0.3" apply false
 }
 
@@ -11,6 +11,7 @@ allprojects {
 
     repositories {
         mavenCentral()
+        maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/bootstrap") }
     }
 
     tasks.withType<KotlinCompile> {
