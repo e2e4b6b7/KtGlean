@@ -11,6 +11,7 @@ fun GenerationContext.generateType(type: Type, reservedName: String) = when (typ
     is NatType -> NAT_TYPE
     is BoolType -> BOOL_TYPE
     is StringType -> STRING_TYPE
+    is ByteType -> BYTE_TYPE
     is RecordType -> generateRecord(type, reservedName)
     is ReferenceType -> generateReferenceType(type)
     is ArrayType -> generateArrayType(type, reservedName)
