@@ -1,5 +1,7 @@
 lexer grammar AngleLexer;
 
+fragment DECIMAL : [0-9]+;
+
 COMMENT : '#' ~'\n'* -> skip;
 WHITESPACE : [ \t\r\n] -> skip;
 
@@ -23,9 +25,7 @@ ARROW : '->';
 COLON: ':';
 COMMA : ',';
 
-IDENT : [a-zA-Z_] [a-zA-Z0-9_]*;
-fragment DECIMAL : [0-9]+;
-
-QIDENT : IDENT ('.' IDENT)*;
+PREIDENT : [a-zA-Z_] [a-zA-Z0-9_]*;
+QIDENT : PREIDENT ('.' PREIDENT)*;
 QVIDENT : QIDENT '.' DECIMAL;
 

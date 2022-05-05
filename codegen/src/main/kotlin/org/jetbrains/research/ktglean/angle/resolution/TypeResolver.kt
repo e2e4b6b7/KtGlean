@@ -22,14 +22,14 @@ class TypeResolver(context: TypeResolutionContext) {
 
         override fun visitRecord(ctx: AngleParser.RecordContext): Type {
             val fields = ctx.fielddef().asSequence()
-                .map { Pair(it.IDENT().text, visitType(it.type())) }
+                .map { Pair(it.ident().text, visitType(it.type())) }
                 .toMap()
             return RecordType(fields)
         }
 
         override fun visitSum(ctx: AngleParser.SumContext): Type {
             val options = ctx.fielddef().asSequence()
-                .map { Pair(it.IDENT().text, visitType(it.type())) }
+                .map { Pair(it.ident().text, visitType(it.type())) }
                 .toMap()
             return SumType(options)
         }
@@ -43,7 +43,7 @@ class TypeResolver(context: TypeResolutionContext) {
         }
 
         override fun visitEnum_(ctx: AngleParser.Enum_Context): Type {
-            return EnumType(ctx.IDENT().map { it.text })
+            return EnumType(ctx.ident().map { it.text })
         }
     }
 }

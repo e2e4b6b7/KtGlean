@@ -16,26 +16,30 @@ schemadecl : typedef | predicate | import_ /*| derivedecl*/;
 
 import_ : IMPORT QVIDENT;
 
-predicate : PREDICATE IDENT COLON key value? /*deriving*/;
+predicate : PREDICATE ident COLON key value? /*deriving*/;
 
 key : type;
 
 value : ARROW type;
 
+
 type : reference | record | array | maybe | enum_ | sum;
 
 sum : BRACE_OPEN (fielddef (PIPE fielddef)* PIPE?)? BRACE_CLOSE;
 
-enum_ : ENUM BRACE_OPEN (IDENT (PIPE IDENT)* PIPE?)? BRACE_CLOSE;
+enum_ : ENUM BRACE_OPEN (ident (PIPE ident)* PIPE?)? BRACE_CLOSE;
 
 maybe : MAYBE type;
 
 array : SQBR_OPEN type SQBR_CLOSE;
 
-reference : QIDENT | IDENT;
+reference : QIDENT | ident;
 
 record : BRACE_OPEN (fielddef (COMMA fielddef)* COMMA?)? BRACE_CLOSE;
 
-fielddef : IDENT COLON type;
+fielddef : ident COLON type;
 
-typedef : TYPE IDENT EQ type;
+typedef : TYPE ident EQ type;
+
+
+ident : PREIDENT | ENUM | MAYBE | TYPE | IMPORT | PREDICATE | SCHEMA;
