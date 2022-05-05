@@ -2,6 +2,7 @@ package org.jetbrains.research.ktglean.angle.generation
 
 import com.squareup.kotlinpoet.ClassName
 
+val BYTE_TYPE = ClassName("kotlin", "Byte")
 val NAT_TYPE = ClassName("kotlin", "Int")
 val BOOL_TYPE = ClassName("kotlin", "Boolean")
 val STRING_TYPE = ClassName("kotlin", "String")
