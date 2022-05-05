@@ -15,6 +15,7 @@ class TypeResolver(context: TypeResolutionContext) {
                 "nat" -> NatType
                 "string" -> StringType
                 "bool" -> BoolType
+                "byte" -> ByteType
                 else -> context.resolve(qname)
             }
         }

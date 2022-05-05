@@ -8,6 +8,8 @@ object StringType : Type
 
 object BoolType : Type
 
+object ByteType : Type
+
 data class RecordType(val fields: Map<String, Type>) : Type
 
 data class ReferenceType(val id: DefinitionID) : Type
