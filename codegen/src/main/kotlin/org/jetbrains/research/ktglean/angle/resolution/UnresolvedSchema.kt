@@ -38,8 +38,8 @@ private fun UnresolvedSchema.unqualifiedContext(resolved: Map<SchemaID, Lazy<Sch
         unqualifiedTypes.putAll(inheritedSchema.value.types)
     }
     tree.schemadecl().forEach {
-        it.predicate()?.IDENT()?.text?.let { unqualifiedTypes[it] = ReferenceType(id.definition(it)) }
-        it.typedef()?.IDENT()?.text?.let { unqualifiedTypes[it] = ReferenceType(id.definition(it)) }
+        it.predicate()?.ident()?.text?.let { unqualifiedTypes[it] = ReferenceType(id.definition(it)) }
+        it.typedef()?.ident()?.text?.let { unqualifiedTypes[it] = ReferenceType(id.definition(it)) }
     }
     return unqualifiedTypes
 }
@@ -48,7 +48,7 @@ private fun UnresolvedSchema.collectTypeAliases(typeResolver: TypeResolver): Lis
     return tree.schemadecl().asSequence()
         .mapNotNull { it.typedef() }
         .map { typeCtx ->
-            val definitionID = id.definition(typeCtx.IDENT().text)
+            val definitionID = id.definition(typeCtx.ident().text)
             val type = typeResolver.resolve(typeCtx.type())
             TypeAlias(definitionID, type)
         }
@@ -59,7 +59,7 @@ private fun UnresolvedSchema.collectPredicates(typeResolver: TypeResolver): List
     return tree.schemadecl().asSequence()
         .mapNotNull { it.predicate() }
         .map { predicateCtx ->
-            val predicateID = id.definition(predicateCtx.IDENT().text)
+            val predicateID = id.definition(predicateCtx.ident().text)
             val keyType = typeResolver.resolve(predicateCtx.key().type())
             val valueType = predicateCtx.value()?.let { typeResolver.resolve(it.type()) }
             Predicate(predicateID, keyType, valueType)
