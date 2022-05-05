@@ -10,6 +10,7 @@ dependencies {
 
     antlr("org.antlr", "antlr4", "4.9.3")
     implementation("com.squareup", "kotlinpoet", "1.11.0")
+    implementation("org.jetbrains.kotlinx", "kotlinx-cli", "0.3.4")
 }
 
 tasks.withType<KotlinCompile> {
@@ -27,4 +28,14 @@ tasks.generateGrammarSource {
     arguments.add("-package")
     arguments.add(sourcesPackage)
     outputDirectory = generatedDirectory.resolve(sourcesPackage.replace('.', File.separatorChar))
+}
+
+tasks.register("fatJar", type = Jar::class) {
+    archiveFileName.set("codegen.jar")
+    manifest {
+        attributes["Main-Class"] = "org.jetbrains.research.ktglean.angle.MainKt"
+    }
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
+    with(tasks["jar"] as CopySpec)
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
