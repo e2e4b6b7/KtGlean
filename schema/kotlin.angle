@@ -38,8 +38,6 @@ predicate Type : {
     nullability : Nullability,
 }
 
-predicate GenericType : string
-
 predicate TypeParameter : {
     name : string,
     isReified : bool,
