@@ -8,7 +8,7 @@ import kotlin.io.path.*
 
 class JsonStorage(path: Path) : FactsStorage {
     private val filePath = path.resolve("data.json")
-    private val facts = HashMap<String, PredicateFacts>()
+    private val factsByName = HashMap<String, PredicateFacts>()
 
     init {
         filePath.parent.createDirectories()
@@ -17,12 +17,12 @@ class JsonStorage(path: Path) : FactsStorage {
     }
 
     override fun addFact(fact: Fact) {
-        facts.computeIfAbsent(fact.name, ::PredicateFacts).facts.add(fact)
+        factsByName.computeIfAbsent(fact.name, ::PredicateFacts).facts.add(fact)
     }
 
     override fun dispose() {
         filePath.bufferedWriter().use {
-            PredicateFacts.writeBatch(facts.values, it)
+            PredicateFacts.writeBatch(factsByName.values, it)
         }
     }
 }
