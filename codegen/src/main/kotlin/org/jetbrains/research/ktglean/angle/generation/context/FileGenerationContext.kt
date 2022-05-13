@@ -9,7 +9,7 @@ class FileGenerationContext(
 ) : GenerationContext(resolver) {
 
     init {
-        fileBuilder.suppressWarnings("RedundantVisibilityModifier")
+        fileBuilder.suppressWarnings("RedundantVisibilityModifier", "unused")
     }
 
     override fun nestedClassName(name: String) = ClassName(fileBuilder.packageName, name)

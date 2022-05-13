@@ -12,3 +12,9 @@ val ARRAY_TYPE = ClassName("kotlin.collections", "List")
 val FACT_TYPE = ClassName("org.jetbrains.research.ktglean.serialization", "Fact")
 
 val SUPPRESS_TYPE = ClassName("kotlin", "Suppress")
+
+val BYTE_CLASS = KotlinClass(BYTE_TYPE)
+val NAT_CLASS = KotlinClass(NAT_TYPE)
+val BOOL_CLASS = KotlinClass(BOOL_TYPE)
+val STRING_CLASS = KotlinClass(STRING_TYPE)
+val UNIT_CLASS = KotlinClass(UNIT_TYPE)
