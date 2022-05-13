@@ -1,28 +1,39 @@
 package org.jetbrains.research.ktglean.factories
 
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
-import org.jetbrains.kotlin.fir.declarations.FirRegularClass
+import org.jetbrains.kotlin.fir.declarations.FirClass
 import org.jetbrains.kotlin.fir.declarations.utils.classId
 import org.jetbrains.kotlin.fir.types.FirTypeRef
 import org.jetbrains.kotlin.name.ClassId
-import org.jetbrains.research.ktglean.predicates.GleanClass
+import org.jetbrains.research.ktglean.predicates.kotlin.v1.ClassDeclaration
+import org.jetbrains.research.ktglean.predicates.unresolved
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
+import kotlin.collections.set
 
 class GleanClassFactory : KoinComponent {
-    private val cache = HashMap<ClassId, GleanClass>()
+    private val typeFactory: GleanTypeFactory by inject()
+    private val cache = HashMap<ClassId, ClassDeclaration>()
 
-    fun getClass(firRegularClass: FirRegularClass, context: CheckerContext): GleanClass {
+    fun getClassDeclaration(firRegularClass: FirClass, context: CheckerContext): ClassDeclaration {
         cache[firRegularClass.classId]?.let { return it }
 
-        val name = firRegularClass.classId.asFqNameString()
-        val supers = firRegularClass.superTypeRefs.map { gleanSuperclass(it, context) ?: GleanClass.UNRESOLVED }
-        val gleanClass = GleanClass(GleanClass.Key(name, supers))
+        val supers = firRegularClass.superTypeRefs.map { typeFactory.getTypeRef(it, context) }
+        val params = firRegularClass.typeParameters.map { typeFactory.getTypeParameter(it, context) }
+        val modifiers = firRegularClass.modifiersList
+        val gleanClass = ClassDeclaration(
+            firRegularClass.classId.qname,
+            supers,
+            params,
+            modifiers,
+            firRegularClass.loc
+        )
 
         cache[firRegularClass.classId] = gleanClass
 
         return gleanClass
     }
-
-    private fun gleanSuperclass(typeRef: FirTypeRef, context: CheckerContext) =
-        typeRef.firRegularClass(context)?.let { getClass(it, context) }
 }
+
+fun GleanClassFactory.getClassDeclaration(firTypeRef: FirTypeRef, context: CheckerContext) =
+    firTypeRef.firRegularClass(context)?.let { getClassDeclaration(it, context) } ?: unresolved()

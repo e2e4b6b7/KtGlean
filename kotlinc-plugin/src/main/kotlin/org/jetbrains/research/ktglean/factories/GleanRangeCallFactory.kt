@@ -6,18 +6,18 @@ import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.psi
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.parentsWithSelf
-import org.jetbrains.research.ktglean.predicates.GleanRangeCall
-import org.jetbrains.research.ktglean.predicates.GleanRangeCall.Context
-import org.jetbrains.research.ktglean.predicates.GleanRangeCall.Context.*
+import org.jetbrains.research.ktglean.predicates.rangesAnalysis.v1.RangeCall
+import org.jetbrains.research.ktglean.predicates.rangesAnalysis.v1.RangeCall.Key.Context
+import org.jetbrains.research.ktglean.predicates.rangesAnalysis.v1.RangeCall.Key.Context.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class GleanRangeCallFactory : KoinComponent {
     private val functionCallFactory: GleanFunctionCallFactory by inject()
 
-    fun getRangeCall(functionCall: FirFunctionCall, context: CheckerContext): GleanRangeCall {
+    fun getRangeCall(functionCall: FirFunctionCall, context: CheckerContext): RangeCall {
         val gleanCall = functionCallFactory.getFunctionCall(functionCall, context)
-        return GleanRangeCall(GleanRangeCall.Key(gleanCall, context(functionCall)))
+        return RangeCall(RangeCall.Key(gleanCall, context(functionCall)))
     }
 
     private fun context(functionCall: FirFunctionCall): Context {

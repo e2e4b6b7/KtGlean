@@ -12,6 +12,6 @@ class FunctionDeclarationsIndexer(private val storage: FactsStorage) : FirSimple
     private val builder: GleanFunctionFactory by inject()
 
     override fun index(declaration: FirSimpleFunction, context: CheckerContext) {
-        storage.addFact(builder.getFunction(declaration, context))
+        storage.addFact(builder.getFunctionDeclaration(declaration, context))
     }
 }
