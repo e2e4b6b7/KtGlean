@@ -1,17 +1,14 @@
 package org.jetbrains.research.ktglean.angle.generation
 
-import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import com.squareup.kotlinpoet.TypeName
 import org.jetbrains.research.ktglean.angle.data.*
 import org.jetbrains.research.ktglean.angle.generation.context.*
 
-
 fun GenerationContext.generateType(type: Type, reservedName: String) = when (type) {
-    is NatType -> NAT_TYPE
-    is BoolType -> BOOL_TYPE
-    is StringType -> STRING_TYPE
-    is ByteType -> BYTE_TYPE
+    is NatType -> NAT_CLASS
+    is BoolType -> BOOL_CLASS
+    is StringType -> STRING_CLASS
+    is ByteType -> BYTE_CLASS
     is RecordType -> generateRecord(type, reservedName)
     is ReferenceType -> generateReferenceType(type)
     is ArrayType -> generateArrayType(type, reservedName)
@@ -20,45 +17,45 @@ fun GenerationContext.generateType(type: Type, reservedName: String) = when (typ
     is SumType -> generateSumType(type, reservedName)
 }
 
-private fun GenerationContext.generateSumType(type: SumType, reservedName: String): TypeName {
+private fun GenerationContext.generateSumType(type: SumType, reservedName: String): KotlinClass {
     return innerSealed(reservedName) {
         for ((optionName, optionType) in type.options) {
             innerClass(generateTypeName(optionName)) {
-                val optionClassName = generateType(optionType, generateTypeName(optionName))
-                addPrimaryProperty(optionName, optionClassName)
+                val optionClass = generateType(optionType, generateTypeName(optionName))
+                addPrimaryProperty(optionName, optionClass.name)
                 addSuperinterface(this@innerSealed.className)
             }
         }
     }
 }
 
-private fun GenerationContext.generateEnumType(type: EnumType, reservedName: String): TypeName {
-    if (type.values.isEmpty()) return UNIT_TYPE
+private fun GenerationContext.generateEnumType(type: EnumType, reservedName: String): KotlinClass {
+    if (type.values.isEmpty()) return UNIT_CLASS
     return innerEnum(reservedName) {
         type.values.forEach(::addConstant)
     }
 }
 
-private fun GenerationContext.generateMaybeType(type: MaybeType, reservedName: String): TypeName {
-    val originalType = generateType(type.originalType, reservedName)
-    return originalType.copy(nullable = true)
+private fun GenerationContext.generateMaybeType(type: MaybeType, reservedName: String): KotlinClass {
+    val originalClass = generateType(type.originalType, reservedName)
+    return KotlinClass(originalClass.name.copy(nullable = true))
 }
 
-private fun GenerationContext.generateArrayType(type: ArrayType, reservedName: String): TypeName {
-    val elementType = generateType(type.elementType, reservedName + "Elem")
-    return ARRAY_TYPE.parameterizedBy(elementType)
+private fun GenerationContext.generateArrayType(type: ArrayType, reservedName: String): KotlinClass {
+    val elementClass = generateType(type.elementType, reservedName + "Elem")
+    return KotlinClass(ARRAY_TYPE.parameterizedBy(elementClass.name))
 }
 
-private fun GenerationContext.generateRecord(type: RecordType, reservedName: String): ClassName {
-    if (type.fields.isEmpty()) return UNIT_TYPE
+private fun GenerationContext.generateRecord(type: RecordType, reservedName: String): KotlinClass {
+    if (type.fields.isEmpty()) return UNIT_CLASS
     return innerClass(reservedName) {
         for ((fieldName, fieldType) in type.fields) {
-            val fieldClassName = generateType(fieldType, generateTypeName(fieldName))
-            addPrimaryProperty(fieldName, fieldClassName)
+            val fieldClass = generateType(fieldType, generateTypeName(fieldName))
+            addPrimaryProperty(fieldName, fieldClass.name)
         }
     }
 }
 
-private fun GenerationContext.generateReferenceType(type: ReferenceType) = resolver.classNameOf(type.id)
+private fun GenerationContext.generateReferenceType(type: ReferenceType) = KotlinClass(resolver.classNameOf(type.id))
 
 private fun generateTypeName(fieldName: String): String = fieldName.replaceFirstChar { it.uppercaseChar() }

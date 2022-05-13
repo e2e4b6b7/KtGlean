@@ -31,8 +31,10 @@ inline fun ClassGenerationContext.addGetterProperty(
 ) {
     builder.addProperty(PropertySpec.builder(name, type).apply {
         if (overridden) addModifiers(KModifier.OVERRIDE)
-        getter(FunSpec.getterBuilder().apply {
-            getterConfig()
-        }.build())
+        getter(FunSpec.getterBuilder().apply(getterConfig).build())
     }.build())
+}
+
+inline fun ClassGenerationContext.addConstructor(config: FunSpec.Builder.() -> Unit) {
+    builder.addFunction(FunSpec.constructorBuilder().apply(config).build())
 }
