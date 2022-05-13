@@ -4,7 +4,8 @@ import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.expressions.FirConstExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.psi
-import org.jetbrains.research.ktglean.predicates.GleanFloatLiteralUsage
+import org.jetbrains.research.ktglean.predicates.floatLiteralAnalysis.v1.FloatLiteralUsage
+import org.jetbrains.research.ktglean.predicates.unresolved
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -16,9 +17,9 @@ class GleanFloatLiteralUsageFactory : KoinComponent {
         literal: FirConstExpression<Float>,
         literalPos: Int,
         context: CheckerContext
-    ): GleanFloatLiteralUsage {
+    ): FloatLiteralUsage {
         val gleanCall = functionCallBuilder.getFunctionCall(functionCall, context)
-        val text = literal.psi?.text ?: "UNRESOLVED"
-        return GleanFloatLiteralUsage(GleanFloatLiteralUsage.Key(gleanCall, text, literalPos))
+        val text = literal.psi?.text ?: unresolved()
+        return FloatLiteralUsage(FloatLiteralUsage.Key(gleanCall, text, literalPos))
     }
 }

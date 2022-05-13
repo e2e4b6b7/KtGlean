@@ -10,10 +10,12 @@ import org.koin.dsl.module
 val storage = ::JsonStorage
 
 val indexers = listOf<(FactsStorage) -> Indexer>(
-    ::ClassDeclarationsIndexer,
-    ::FunctionDeclarationsIndexer,
+    ::XRefIndexer,
     ::FloatLiteralInCallIndexer,
-    ::RangeCallIndexer
+    ::RangeCallIndexer,
+    ::FunctionDeclarationsIndexer,
+    ::PropertyDeclarationIndexer,
+    ::ClassDeclarationsIndexer,
 )
 
 val factories = module {
@@ -22,4 +24,7 @@ val factories = module {
     single { GleanFunctionCallFactory() }
     single { GleanFloatLiteralUsageFactory() }
     single { GleanRangeCallFactory() }
+    single { GleanTypeFactory() }
+    single { GleanPropertyFactory() }
+    single { GleanXRefFactory() }
 }

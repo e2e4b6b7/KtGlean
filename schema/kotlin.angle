@@ -1,24 +1,91 @@
 schema kotlin.1 {
 
+type Unit = {}
+
 predicate File : string
+predicate Package : string
 
 type Loc = {
     file : File,
     offset : nat,
 }
 
-predicate Class : {
-  	name : string,
-   	supertypes : [Class],
+# Visibility scope of declaration
+type Visibility = enum { Private | Protected | Public | Internal }
+
+type Variance = enum { InVariance | OutVariance | Invariant }
+
+type Modifier = enum { Data | Value | Sealed | Interface | Open }
+
+type Nullability = enum { NotNull | Nullable | Unknown }
+
+predicate QName : {
+    package : Package,
+    name : string,
 }
 
-predicate Function : {
+predicate TypeRef : {
+    explicitRef: {
+		class : QName,
+	#   typeParameters
+	} |
+	parameterRef : string |
+	star : Unit |
+}
+
+predicate Type : {
+    ref : TypeRef,
+    nullability : Nullability,
+}
+
+predicate GenericType : string
+
+predicate TypeParameter : {
     name : string,
-    returnType : Class,
+    isReified : bool,
+    bound : [Type],
+    variance : Variance,
+}
+
+predicate ClassDeclaration : {
+  	name : QName,
+   	supertypes : [TypeRef],
+    typeParams : [TypeParameter],
+    modifiers : [Modifier],
+    loc: Loc,
+}
+
+predicate FunctionDeclaration : {
+    name : QName,
+    argTypes : [Type],
+    typeParams : [TypeParameter],
+    returnType : Type,
+    modifiers : [Modifier],
+    loc : Loc,
+}
+
+predicate PropertyDeclaration : {
+    name : QName,
+    typeParams : [TypeParameter],
+    type : Type,
+    mutable : bool,
+    modifiers : [Modifier],
+    loc : Loc
+}
+
+predicate XRefTarget : {
+    class_ : ClassDeclaration |
+    function_ : FunctionDeclaration |
+    property_ : PropertyDeclaration |
+}
+
+predicate XRef : {
+    target : XRefTarget,
+    loc : Loc,
 }
 
 predicate FunctionCall : {
-   	function : Function,
+   	function : FunctionDeclaration,
     loc : Loc,
 }
 

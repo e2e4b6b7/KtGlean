@@ -12,6 +12,6 @@ class ClassDeclarationsIndexer(private val storage: FactsStorage) : FirRegularCl
     private val builder: GleanClassFactory by inject()
 
     override fun index(declaration: FirRegularClass, context: CheckerContext) {
-        storage.addFact(builder.getClass(declaration, context))
+        storage.addFact(builder.getClassDeclaration(declaration, context))
     }
 }
