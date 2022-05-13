@@ -41,3 +41,6 @@ val DeclaredSchema.imports: List<SchemaID>
 
 val DeclaredSchema.inherits: List<SchemaID>
     get() = tree.inherit()?.QVIDENT()?.map { it.schemaID } ?: emptyList()
+
+val DeclaredSchema.isRootSchema: Boolean
+    get() = id.name == "all"

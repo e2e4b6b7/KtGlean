@@ -22,7 +22,7 @@ fun generate(src: Path, out: Path, basePackage: String) {
     val schemas = mutableMapOf<SchemaID, Lazy<Schema>>()
     parseTree.schema().asSequence()
         .map { DeclaredSchema(it) }
-        .filter { it.id.name != "all" }
+        .filter { !it.isRootSchema }
         .map { it.toUnresolved() }
         .groupingBy { it.id }
         .aggregateTo(schemas) { _, _, unresolvedSchema, first ->

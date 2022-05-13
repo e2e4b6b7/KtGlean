@@ -1,6 +1,5 @@
 package org.jetbrains.research.ktglean.angle.generation
 
-import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import org.jetbrains.research.ktglean.angle.data.*
 import org.jetbrains.research.ktglean.angle.generation.context.*
@@ -19,8 +18,7 @@ fun generateSchema(schema: Schema, basePackage: String, rootDirectory: Path) {
 private fun FileGenerationContext.generateTypeAlias(typeAlias: TypeAlias) {
     val typeName = generateType(typeAlias.type, typeAlias.id.name)
     // If class was generated there is no need to generate typealias
-    if (typeName is ClassName && typeName.simpleName == typeAlias.id.name) return
-    addTypeAlias(typeAlias.id.name, typeName)
+    if (!isGenerated(typeName, typeAlias.id.name)) addTypeAlias(typeAlias.id.name, typeName)
 }
 
 private fun FileGenerationContext.generatePredicate(predicate: Predicate) {
