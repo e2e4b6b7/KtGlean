@@ -21,7 +21,7 @@ class RangeCallIndexer(private val storage: FactsStorage) : FirFunctionCallIndex
     }
 
     private fun isRange(typeRef: FirTypeRef, context: CheckerContext): Boolean {
-        val firRegularClass = typeRef.firRegularClass(context) ?: return false
+        val firRegularClass = typeRef.toFirClass(context) ?: return false
         return firRegularClass.classId.asFqNameString() == "kotlin.ranges.ClosedRange"
             || firRegularClass.superTypeRefs.any { isRange(it, context) }
     }

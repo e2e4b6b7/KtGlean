@@ -10,7 +10,8 @@ import org.koin.dsl.module
 val storage = ::JsonStorage
 
 val indexers = listOf<(FactsStorage) -> Indexer>(
-    ::XRefIndexer,
+    ::XRefExpressionIndexer,
+    ::XRefDeclarationIndexer,
     ::FloatLiteralInCallIndexer,
     ::RangeCallIndexer,
     ::FunctionDeclarationsIndexer,

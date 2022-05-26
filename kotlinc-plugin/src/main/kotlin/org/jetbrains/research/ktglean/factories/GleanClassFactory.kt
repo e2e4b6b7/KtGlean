@@ -36,4 +36,4 @@ class GleanClassFactory : KoinComponent {
 }
 
 fun GleanClassFactory.getClassDeclaration(firTypeRef: FirTypeRef, context: CheckerContext) =
-    firTypeRef.firRegularClass(context)?.let { getClassDeclaration(it, context) } ?: unresolved()
+    firTypeRef.toFirClass(context)?.let { getClassDeclaration(it, context) } ?: unresolved()
