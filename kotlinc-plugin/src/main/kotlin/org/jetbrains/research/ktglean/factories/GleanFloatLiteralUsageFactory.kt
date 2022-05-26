@@ -10,7 +10,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class GleanFloatLiteralUsageFactory : KoinComponent {
-    private val functionCallBuilder: GleanFunctionCallFactory by inject()
+    private val functionCallFactory: GleanFunctionCallFactory by inject()
 
     fun getFloatLiteralUsage(
         functionCall: FirFunctionCall,
@@ -18,7 +18,7 @@ class GleanFloatLiteralUsageFactory : KoinComponent {
         literalPos: Int,
         context: CheckerContext
     ): FloatLiteralUsage {
-        val gleanCall = functionCallBuilder.getFunctionCall(functionCall, context)
+        val gleanCall = functionCallFactory.getFunctionCall(functionCall, context)
         val text = literal.psi?.text ?: unresolved()
         return FloatLiteralUsage(gleanCall, text, literalPos)
     }

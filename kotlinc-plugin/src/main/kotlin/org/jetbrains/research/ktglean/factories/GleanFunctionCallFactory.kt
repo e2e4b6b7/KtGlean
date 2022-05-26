@@ -9,7 +9,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class GleanFunctionCallFactory : KoinComponent {
-    private val functionBuilder: GleanFunctionFactory by inject()
+    private val functionFactory: GleanFunctionFactory by inject()
 
     fun getFunctionCall(functionCall: FirFunctionCall, context: CheckerContext): FunctionCall {
         val gleanCallee = gleanCallee(functionCall, context) ?: unresolved()
@@ -18,6 +18,6 @@ class GleanFunctionCallFactory : KoinComponent {
 
     private fun gleanCallee(functionCall: FirFunctionCall, context: CheckerContext): FunctionDeclaration? {
         val func = functionCall.callee ?: return null
-        return functionBuilder.getFunctionDeclaration(func, context)
+        return functionFactory.getFunctionDeclaration(func, context)
     }
 }
