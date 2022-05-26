@@ -5,10 +5,10 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.reflect.KClass
 
 object UnresolvedStorage {
-    val unresolvedMap = ConcurrentHashMap<KClass<*>, Lazy<*>>()
+    private val unresolvedMap = ConcurrentHashMap<KClass<*>, Lazy<*>>()
 
     init {
-        addUnresolved { 0 }
+        addUnresolved { -1 }
         addUnresolved { "UNRESOLVED" }
         addUnresolved { emptyList<Nothing>() }
         addUnresolved { File(unresolved()) }
@@ -19,15 +19,13 @@ object UnresolvedStorage {
         addUnresolved { XRefTarget(XRefTarget.Key.Class_(unresolved())) }
     }
 
-    private fun <T : Any> addUnresolved(clazz: KClass<T>, value: Lazy<T>) {
-        unresolvedMap[clazz] = value
-    }
+    fun unresolved(clazz: KClass<*>): Any? = unresolvedMap[clazz]?.value
 
     private inline fun <reified T : Any> addUnresolved(crossinline value: () -> T) {
-        addUnresolved(T::class, lazy { value() })
+        unresolvedMap[T::class] = lazy { value() }
     }
 }
 
 inline fun <reified T : Any> unresolved(): T {
-    return UnresolvedStorage.unresolvedMap[T::class]?.value as? T ?: error("unresolved")
+    return UnresolvedStorage.unresolved(T::class) as? T ?: error("unresolved")
 }
