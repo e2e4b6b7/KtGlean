@@ -13,7 +13,7 @@ class GleanFunctionCallFactory : KoinComponent {
 
     fun getFunctionCall(functionCall: FirFunctionCall, context: CheckerContext): FunctionCall {
         val gleanCallee = gleanCallee(functionCall, context) ?: unresolved()
-        return FunctionCall(FunctionCall.Key(gleanCallee, functionCall.loc))
+        return FunctionCall(gleanCallee, functionCall.loc)
     }
 
     private fun gleanCallee(functionCall: FirFunctionCall, context: CheckerContext): FunctionDeclaration? {

@@ -20,6 +20,6 @@ class GleanFloatLiteralUsageFactory : KoinComponent {
     ): FloatLiteralUsage {
         val gleanCall = functionCallBuilder.getFunctionCall(functionCall, context)
         val text = literal.psi?.text ?: unresolved()
-        return FloatLiteralUsage(FloatLiteralUsage.Key(gleanCall, text, literalPos))
+        return FloatLiteralUsage(gleanCall, text, literalPos)
     }
 }

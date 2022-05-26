@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.fir.declarations.FirTypeParameterRef
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.*
+import org.jetbrains.research.ktglean.predicates.kotlin.v1.TypeRef.Key.*
 import org.jetbrains.research.ktglean.predicates.unresolved
 import org.koin.core.component.KoinComponent
 
@@ -22,7 +23,7 @@ class GleanTypeFactory : KoinComponent {
     private val ConeKotlinType.gleanTypeRef: TypeRef
         get() = when (this) {
             is ConeFlexibleType -> upperBound.gleanTypeRef
-//          is ConeDefinitelyNotNullType -> original.gleanTypeRef
+            is ConeDefinitelyNotNullType -> original.gleanTypeRef
 
             is ConeTypeParameterType -> gleanTypeParameterRef
             is ConeTypeVariableType -> gleanTypeParameterRef
@@ -37,14 +38,14 @@ class GleanTypeFactory : KoinComponent {
         get() = when (this) {
             is ConeKotlinType -> gleanTypeRef
             is ConeKotlinTypeProjection -> type.gleanTypeRef
-            ConeStarProjection -> TypeRef(TypeRef.Key.Star(Unit))
+            ConeStarProjection -> TypeRef(Star(Unit))
         }
 
     private val ConeLookupTagBasedType.gleanTypeParameterRef
-        get() = TypeRef(TypeRef.Key.ParameterRef(lookupTag.name.asString()))
+        get() = TypeRef(ParameterRef(lookupTag.name.asString()))
 
     private val ConeKotlinType.gleanTypeExplicitRef
-        get() = TypeRef(TypeRef.Key.ExplicitRef(TypeRef.Key.ExplicitRef.ExplicitRef(classId?.qname ?: unresolved())))
+        get() = TypeRef(ExplicitRef(ExplicitRef.ExplicitRef(classId?.qname ?: unresolved())))
 
 }
 

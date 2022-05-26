@@ -17,7 +17,7 @@ class GleanRangeCallFactory : KoinComponent {
 
     fun getRangeCall(functionCall: FirFunctionCall, context: CheckerContext): RangeCall {
         val gleanCall = functionCallFactory.getFunctionCall(functionCall, context)
-        return RangeCall(RangeCall.Key(gleanCall, context(functionCall)))
+        return RangeCall(gleanCall, context(functionCall))
     }
 
     private fun context(functionCall: FirFunctionCall): Context {
