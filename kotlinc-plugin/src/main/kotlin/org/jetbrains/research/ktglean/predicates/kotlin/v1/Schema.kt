@@ -7,6 +7,8 @@ package org.jetbrains.research.ktglean.predicates.kotlin.v1
 
 import org.jetbrains.research.ktglean.serialization.Fact
 
+public typealias Unit = kotlin.Unit
+
 public data class Loc(
     public val `file`: File,
     public val offset: Int,
@@ -79,6 +81,7 @@ public data class TypeRef(
         ) : Key {
             public data class ExplicitRef(
                 public val `class`: QName,
+                public val typeParameters: List<Type>,
             )
         }
 
@@ -104,13 +107,6 @@ public data class Type(
         public val ref: TypeRef,
         public val nullability: Nullability,
     )
-}
-
-public data class GenericType(
-    public override val key: String,
-) : Fact {
-    public override val name: String
-        get() = "kotlin.GenericType.1"
 }
 
 public data class TypeParameter(
