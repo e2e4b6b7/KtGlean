@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.fir.analysis.extensions.FirAdditionalCheckersExtensi
 import org.jetbrains.kotlin.fir.expressions.FirStatement
 import java.util.*
 
-abstract class FirStatementIndexer : FirBasicExpressionChecker(), Indexer {
+abstract class FirBasicExpressionIndexer : FirBasicExpressionChecker(), Indexer {
     abstract fun index(expression: FirStatement, context: CheckerContext)
 
     final override fun check(expression: FirStatement, context: CheckerContext, reporter: DiagnosticReporter) {
@@ -19,7 +19,7 @@ abstract class FirStatementIndexer : FirBasicExpressionChecker(), Indexer {
     final override fun singletonExtension(): (FirSession) -> FirAdditionalCheckersExtension = { session ->
         object : FirAdditionalCheckersExtension(session) {
             override val expressionCheckers = object : ExpressionCheckers() {
-                override val basicExpressionCheckers = Collections.singleton(this@FirStatementIndexer)
+                override val basicExpressionCheckers = Collections.singleton(this@FirBasicExpressionIndexer)
             }
         }
     }

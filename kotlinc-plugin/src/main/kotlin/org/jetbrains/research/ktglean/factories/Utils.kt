@@ -3,13 +3,14 @@ package org.jetbrains.research.ktglean.factories
 import org.jetbrains.kotlin.fir.*
 import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.analysis.checkers.getModifierList
-import org.jetbrains.kotlin.fir.analysis.checkers.toRegularClassSymbol
 import org.jetbrains.kotlin.fir.declarations.*
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.expressions.FirQualifiedAccess
+import org.jetbrains.kotlin.fir.resolve.firClassLike
+import org.jetbrains.kotlin.fir.resolve.providers.symbolProvider
+import org.jetbrains.kotlin.fir.resolve.toSymbol
 import org.jetbrains.kotlin.fir.symbols.SymbolInternals
-import org.jetbrains.kotlin.fir.types.ConeNullability
-import org.jetbrains.kotlin.fir.types.FirTypeRef
+import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.*
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
@@ -18,9 +19,16 @@ import org.jetbrains.research.ktglean.predicates.kotlin.v1.*
 import org.jetbrains.research.ktglean.predicates.unresolved
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.Variance as GleanVariance
 
+fun FirTypeRef.toFirClass(context: CheckerContext): FirClass? =
+    firClassLike(context.session) as? FirClass
+
 @OptIn(SymbolInternals::class)
-fun FirTypeRef.firRegularClass(context: CheckerContext): FirRegularClass? =
-    toRegularClassSymbol(context.session)?.fir
+fun ClassId.toFirClass(context: CheckerContext) =
+    context.session.symbolProvider.getClassLikeSymbolByClassId(this)?.fir as? FirClass
+
+@OptIn(SymbolInternals::class)
+fun ConeKotlinType.toFirClass(context: CheckerContext) =
+    (this as? ConeClassLikeType)?.lookupTag?.toSymbol(context.session)?.fir as? FirClass
 
 val FirElement.loc: Loc
     get() {
