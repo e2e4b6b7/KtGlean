@@ -35,7 +35,7 @@ tasks.register("fatJar", type = Jar::class) {
     manifest {
         attributes["Main-Class"] = "org.jetbrains.research.ktglean.angle.MainKt"
     }
-    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     with(tasks["jar"] as CopySpec)
+    from(configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) })
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }

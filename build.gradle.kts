@@ -1,13 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.20-dev-474" apply false
+    kotlin("jvm") version "1.7.20-dev-1435" apply false
     id("com.github.gmazzo.buildconfig") version "3.0.3" apply false
 }
 
 allprojects {
     group = "org.jetbrains.research.ktglean"
-    version = "0.0.0"
+    version = "0.1.0"
 
     repositories {
         mavenCentral()
@@ -17,8 +17,8 @@ allprojects {
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "11"
-            languageVersion = "1.6"
-            apiVersion = "1.6"
+            languageVersion = "1.7"
+            apiVersion = "1.7"
         }
     }
 }

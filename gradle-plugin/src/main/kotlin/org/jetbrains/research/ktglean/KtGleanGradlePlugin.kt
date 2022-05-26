@@ -25,7 +25,8 @@ class KtGleanGradlePlugin : KotlinCompilerPluginSupportPlugin {
         extensions.create("KtGlean", KtGleanGradleExtension::class.java)
     }
 
-    override fun isApplicable(kotlinCompilation: KotlinCompilation<*>) = true
+    override fun isApplicable(kotlinCompilation: KotlinCompilation<*>) =
+        kotlinCompilation.target.project.extensions.getByType(KtGleanGradleExtension::class.java).apply
 
     override fun getCompilerPluginId() = pluginID
 
