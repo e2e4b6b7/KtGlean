@@ -27,7 +27,7 @@ predicate QName : {
 predicate TypeRef : {
     explicitRef: {
 		class : QName,
-	#   typeParameters
+	    typeParameters : [Type],
 	} |
 	parameterRef : string |
 	star : Unit |

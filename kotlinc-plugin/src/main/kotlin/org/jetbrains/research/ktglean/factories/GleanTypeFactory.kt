@@ -15,38 +15,40 @@ class GleanTypeFactory : KoinComponent {
 
     fun getTypeRef(coneKotlinType: ConeKotlinType, context: CheckerContext): TypeRef {
         cache[coneKotlinType]?.let { return it }
-        val gleanTypeRef = coneKotlinType.gleanTypeRef
+        val gleanTypeRef = coneKotlinType.gleanTypeRef(context)
         cache[coneKotlinType] = gleanTypeRef
         return gleanTypeRef
     }
 
-    private val ConeKotlinType.gleanTypeRef: TypeRef
-        get() = when (this) {
-            is ConeFlexibleType -> upperBound.gleanTypeRef
-            is ConeDefinitelyNotNullType -> original.gleanTypeRef
+    private fun ConeKotlinType.gleanTypeRef(context: CheckerContext): TypeRef = when (this) {
+        is ConeFlexibleType -> upperBound.gleanTypeRef(context)
+        is ConeDefinitelyNotNullType -> original.gleanTypeRef(context)
 
-            is ConeTypeParameterType -> gleanTypeParameterRef
-            is ConeTypeVariableType -> gleanTypeParameterRef
-            is ConeStubType -> constructor.variable.defaultType.gleanTypeParameterRef
+        is ConeTypeParameterType -> gleanTypeParameterRef()
+        is ConeTypeVariableType -> gleanTypeParameterRef()
+        is ConeStubType -> constructor.variable.defaultType.gleanTypeParameterRef()
 
-            is ConeCapturedType -> constructor.projection.gleanTypeRef
+        is ConeCapturedType -> constructor.projection.gleanTypeRef(context)
 
-            else -> gleanTypeExplicitRef
-        }
+        else -> gleanTypeExplicitRef(context)
+    }
 
-    private val ConeTypeProjection.gleanTypeRef: TypeRef
-        get() = when (this) {
-            is ConeKotlinType -> gleanTypeRef
-            is ConeKotlinTypeProjection -> type.gleanTypeRef
-            ConeStarProjection -> TypeRef(Star(Unit))
-        }
+    private fun ConeTypeProjection.gleanTypeRef(context: CheckerContext): TypeRef = when (this) {
+        is ConeKotlinType -> gleanTypeRef(context)
+        is ConeKotlinTypeProjection -> type.gleanTypeRef(context)
+        ConeStarProjection -> TypeRef(Star(Unit))
+    }
 
-    private val ConeLookupTagBasedType.gleanTypeParameterRef
-        get() = TypeRef(ParameterRef(lookupTag.name.asString()))
+    private fun ConeLookupTagBasedType.gleanTypeParameterRef() = TypeRef(ParameterRef(lookupTag.name.asString()))
 
-    private val ConeKotlinType.gleanTypeExplicitRef
-        get() = TypeRef(ExplicitRef(ExplicitRef.ExplicitRef(classId?.qname ?: unresolved())))
-
+    private fun ConeKotlinType.gleanTypeExplicitRef(context: CheckerContext) =
+        TypeRef(
+            ExplicitRef(
+                ExplicitRef.ExplicitRef(
+                    classId?.qname ?: unresolved(),
+                    typeArguments.mapNotNull { typeProjection -> typeProjection.type?.let { getType(it, context) } })
+            )
+        )
 }
 
 fun GleanTypeFactory.getTypeParameter(firTypeParameter: FirTypeParameter, context: CheckerContext): TypeParameter =
@@ -63,8 +65,11 @@ fun GleanTypeFactory.getTypeParameter(
     context: CheckerContext
 ): TypeParameter = getTypeParameter(firTypeParameterRef.symbol.fir, context)
 
+fun GleanTypeFactory.getType(coneType: ConeKotlinType, context: CheckerContext): Type =
+    Type(getTypeRef(coneType, context), coneType.nullability.gleanNullability)
+
 fun GleanTypeFactory.getType(firTypeRef: FirTypeRef, context: CheckerContext): Type =
-    Type(getTypeRef(firTypeRef, context), firTypeRef.coneType.nullability.gleanNullability)
+    getType(firTypeRef.coneType, context)
 
 fun GleanTypeFactory.getTypeRef(firTypeRef: FirTypeRef, context: CheckerContext): TypeRef =
     getTypeRef(firTypeRef.coneType, context)
