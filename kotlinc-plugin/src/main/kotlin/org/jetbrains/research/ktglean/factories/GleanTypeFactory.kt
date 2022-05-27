@@ -7,7 +7,6 @@ import org.jetbrains.kotlin.fir.symbols.SymbolInternals
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.*
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.TypeRef.Key.*
-import org.jetbrains.research.ktglean.predicates.unresolved
 import org.koin.core.component.KoinComponent
 
 class GleanTypeFactory : KoinComponent {

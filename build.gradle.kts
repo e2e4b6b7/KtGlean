@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.0-RC" apply false
+    kotlin("jvm") version "1.7.20-dev-1435" apply false
     id("com.github.gmazzo.buildconfig") version "3.0.3" apply false
 }
 

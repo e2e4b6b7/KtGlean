@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.fir.declarations.utils.classId
 import org.jetbrains.kotlin.fir.types.FirTypeRef
 import org.jetbrains.kotlin.name.ClassId
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.ClassDeclaration
-import org.jetbrains.research.ktglean.predicates.unresolved
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.collections.set

@@ -31,8 +31,19 @@ public enum class Modifier {
     Data,
     Value,
     Sealed,
+    Annotation,
+    Enum,
+    Public,
+    Internal,
+    Protected,
+    Private,
     Interface,
+    Abstract,
     Open,
+    Final,
+    Expect,
+    Actual,
+    Inner,
 }
 
 public enum class Nullability {

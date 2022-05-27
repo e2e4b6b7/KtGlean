@@ -9,7 +9,6 @@ import org.jetbrains.kotlin.fir.expressions.FirResolvedQualifier
 import org.jetbrains.kotlin.fir.types.*
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.*
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.XRefTarget.Key.*
-import org.jetbrains.research.ktglean.predicates.unresolved
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

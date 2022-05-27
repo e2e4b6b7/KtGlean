@@ -15,7 +15,13 @@ type Visibility = enum { Private | Protected | Public | Internal }
 
 type Variance = enum { InVariance | OutVariance | Invariant }
 
-type Modifier = enum { Data | Value | Sealed | Interface | Open }
+type Modifier = enum {
+    Data | Value | Sealed | Annotation | Enum |
+    Public | Internal | Protected | Private |
+    Interface | Abstract | Open | Final |
+    Expect | Actual |
+    Inner |
+}
 
 type Nullability = enum { NotNull | Nullable | Unknown }
 
