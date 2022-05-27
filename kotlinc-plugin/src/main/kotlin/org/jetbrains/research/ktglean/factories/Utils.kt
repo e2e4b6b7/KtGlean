@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.name.*
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import org.jetbrains.kotlin.types.Variance
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.*
-import org.jetbrains.research.ktglean.predicates.unresolved
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.Variance as GleanVariance
 
 fun FirTypeRef.toFirClass(context: CheckerContext): FirClass? =
@@ -57,7 +56,23 @@ val FirElement.modifiersList
             KtTokens.DATA_KEYWORD -> Modifier.Data
             KtTokens.VALUE_KEYWORD -> Modifier.Value
             KtTokens.SEALED_KEYWORD -> Modifier.Sealed
-            // TODO
+            KtTokens.ANNOTATION_KEYWORD -> Modifier.Annotation
+            KtTokens.ENUM_KEYWORD -> Modifier.Enum
+
+            KtTokens.PUBLIC_KEYWORD -> Modifier.Public
+            KtTokens.INTERNAL_KEYWORD -> Modifier.Internal
+            KtTokens.PROTECTED_KEYWORD -> Modifier.Protected
+            KtTokens.PRIVATE_KEYWORD -> Modifier.Private
+
+            KtTokens.INTERFACE_KEYWORD -> Modifier.Interface
+            KtTokens.ABSTRACT_KEYWORD -> Modifier.Abstract
+            KtTokens.OPEN_KEYWORD -> Modifier.Open
+            KtTokens.FINAL_KEYWORD -> Modifier.Final
+
+            KtTokens.EXPECT_KEYWORD -> Modifier.Expect
+            KtTokens.ACTUAL_KEYWORD -> Modifier.Actual
+
+            KtTokens.INNER_KEYWORD -> Modifier.Inner
             else -> null
         }
     } ?: emptyList()

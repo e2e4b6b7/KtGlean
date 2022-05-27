@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.fir.analysis.checkers.context.CheckerContext
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.FunctionCall
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.FunctionDeclaration
-import org.jetbrains.research.ktglean.predicates.unresolved
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 

@@ -5,7 +5,6 @@ import org.jetbrains.kotlin.fir.expressions.FirConstExpression
 import org.jetbrains.kotlin.fir.expressions.FirFunctionCall
 import org.jetbrains.kotlin.fir.psi
 import org.jetbrains.research.ktglean.predicates.floatLiteralAnalysis.v1.FloatLiteralUsage
-import org.jetbrains.research.ktglean.predicates.unresolved
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
