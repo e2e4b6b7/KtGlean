@@ -1,4 +1,4 @@
-package org.jetbrains.research.ktglean.predicates
+package org.jetbrains.research.ktglean.factories
 
 import org.jetbrains.research.ktglean.predicates.kotlin.v1.*
 import java.util.concurrent.ConcurrentHashMap
